@@ -1,0 +1,26 @@
+#Direct Dependencies
+
+# Core web framework
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
+
+# Data validation
+pydantic>=2.0.0
+
+# Google ADK (Agent Development Kit)
+google-adk>=1.0.0
+
+# Google AI/LLM
+google-generativeai>=0.3.0
+
+# Type hints support
+typing-extensions>=4.0.0
+
+# Optional: For production Google Sheets integration (currently mocked)
+# gspread
+# google-auth
+# google-auth-oauthlib
+# google-auth-httplib2
+
+# Optional: For production Gmail integration (currently mocked)
+# google-api-python-client
