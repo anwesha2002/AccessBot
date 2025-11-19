@@ -4,29 +4,26 @@
 
 import uvicorn
 import datetime
+import os
 from fastapi import FastAPI
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel
 
+# Hardcode your Google API key here (NOT RECOMMENDED for production)
+os.environ["GOOGLE_API_KEY"] = "AIzaSyBpwfgwQh4Hf19uiuc6lCs6dK3tg4Om6bg"
+
 # --- 1. ADK Core Imports ---
 # These are the fundamental building blocks of the ADK
-from adk.api.fastapi_adapter import AdkFastApiAdapter
-from adk.core.agent import LlmAgent, Agent, Tool
-from adk.core.session import Session, UuidSessionIdSingleton
-from adk.core.context import Context
-from adk.core.message import Message, Role
-from adk.core.llm.llm_provider import LlmProvider
-from adk.core.llm.google_llm import GoogleLlm
-from adk.core.llm.mock_llm import MockLlm
-from adk.core.tool import tool
-from adk.core.adk_logging import AdkLogging
-from adk.core.trace.adk_trace import AdkTrace
+from google.adk.agents import LlmAgent
+from google.adk.models.google_llm import Gemini
+from google.adk.tools.function_tool import FunctionTool
+# from google.adk.telemetry import setup
 
 # --- 2. Observability & Tracing Setup ---
 # Fulfills: "Complete Trace Visibility"
 # This setup enables detailed logging and tracing for debugging.
-AdkLogging.setup_logging()
-AdkTrace.setup_trace()
+# setup.setup_logging()
+# setup.setup_trace()
 
 # --- 3. MOCK API CLIENTS ---
 # In a real project, these would be in separate files and use
@@ -101,28 +98,15 @@ mock_gmail_service = MockGmail()
 # These are the Python functions the agent can "use".
 # Fulfills: Core ADK concept of "Tools"
 
-@tool(
-    description="Finds an employee's record in the 'Employee_Directory' using their email.",
-    params_description={
-        "email": "The employee's email address (e.g., 'sam.sales@company.demo')."
-    }
-)
 def find_employee_by_email(email: str) -> Optional[Dict[str, str]]:
-    """Finds a user in the 'Employee_Directory' sheet."""
+    """Finds an employee's record in the 'Employee_Directory' using their email."""
     return mock_sheets_db.find_row_matching(
         sheet_name="Employee_Directory",
         match_criteria={"Employee_Email": email}
     )
 
-@tool(
-    description="Finds a software policy for a *specific* user role.",
-    params_description={
-        "software_name": "The name of the software (e.g., 'GitHub', 'Salesforce').",
-        "user_role": "The employee's role (e.g., 'Sales', 'Engineering')."
-    }
-)
 def find_policy_for_user(software_name: str, user_role: str) -> Optional[Dict[str, str]]:
-    """Finds a policy matching *both* software and user role."""
+    """Finds a software policy for a specific user role."""
     return mock_sheets_db.find_row_matching(
         sheet_name="Software_Access_Policy",
         match_criteria={
@@ -131,16 +115,8 @@ def find_policy_for_user(software_name: str, user_role: str) -> Optional[Dict[st
         }
     )
 
-@tool(
-    description="Checks the 'Audit_Log' for an existing request for a specific employee and software.",
-    params_description={
-        "employee_email": "The email of the employee to check.",
-        "software_name": "The name of the software to check."
-    }
-)
 def check_audit_log_for_duplicate(employee_email: str, software_name: str) -> Optional[Dict[str, str]]:
-    """Finds the first row in the Audit_Log matching an employee and software."""
-    # This logic is slightly different, it's a "find" not a strict match
+    """Checks the 'Audit_Log' for an existing request for a specific employee and software."""
     log = mock_sheets_db.read_sheet("Audit_Log")
     for row in log:
         if row.get("Employee_Email") == employee_email and row.get("Software_Name") == software_name:
@@ -149,18 +125,8 @@ def check_audit_log_for_duplicate(employee_email: str, software_name: str) -> Op
     print(f"[MOCK_AUDIT] No duplicate found.")
     return None
 
-@tool(
-    description="Appends a new row of data to the 'Audit_Log' Google Sheet. Use this to log every action.",
-    params_description={
-        "employee_email": "The email of the employee for the log.",
-        "request_type": "The type of request: 'Grant', 'Remove', or 'Error'.",
-        "software_name": "The name of the software, or 'N/A'.",
-        "status": "The final status of the request: 'Approved', 'Pending Manager', 'Pending Deprovisioning', 'Rejected', 'Error - User Not Found'.",
-        "notes": "A brief note explaining the action or error."
-    }
-)
 def append_to_audit_log(employee_email: str, request_type: str, software_name: str, status: str, notes: str) -> Dict[str, str]:
-    """Appends a single row to the Audit_Log sheet."""
+    """Appends a new row of data to the 'Audit_Log' Google Sheet. Use this to log every action."""
     row_data = {
         "Employee_Email": employee_email,
         "Request_Type": request_type,
@@ -171,38 +137,24 @@ def append_to_audit_log(employee_email: str, request_type: str, software_name: s
     result = mock_sheets_db.append_to_sheet("Audit_Log", row_data)
     return result
 
-@tool(
-    description="Sends an email using the Gmail service.",
-    params_description={
-        "to": "The recipient's email address.",
-        "subject": "The subject line of the email.",
-        "body": "The body content of the email.",
-        "cc": "(Optional) The CC email address."
-    }
-)
 def send_gmail(to: str, subject: str, body: str, cc: Optional[str] = None) -> Dict[str, str]:
-    """Sends an email."""
+    """Sends an email using the Gmail service."""
     return mock_gmail_service.send_email(to=to, subject=subject, body=body, cc=cc)
 
-# List of all tools for the agent
+# Create FunctionTool instances for all tools
 ALL_TOOLS = [
-    find_employee_by_email,
-    find_policy_for_user,
-    check_audit_log_for_duplicate,
-    append_to_audit_log,
-    send_gmail
+    FunctionTool(func=find_employee_by_email),
+    FunctionTool(func=find_policy_for_user),
+    FunctionTool(func=check_audit_log_for_duplicate),
+    FunctionTool(func=append_to_audit_log),
+    FunctionTool(func=send_gmail)
 ]
 
 # --- 5. Agent Definition ---
 # This is the "brain" of the agent.
 
-try:
-    llm_provider = GoogleLlm()
-    print("Using GoogleLlm (Gemini).")
-except Exception as e:
-    print(f"Warning: GoogleLlm init failed ({e}). Falling back to MockLlm.")
-    print("This mock LLM will not follow instructions, but will show the code flow.")
-    llm_provider = MockLlm(responses_by_message=[("hi", Message(Role.AGENT, "Hello!"))])
+llm_provider = Gemini()
+print("Using Gemini LLM.")
 
 # The Agent's "Brain" - The System Instructions
 # This prompt is the full logic from our plan, updated for the new tools.
@@ -267,12 +219,13 @@ YOUR 5-STEP CORE LOGIC:
    4. Inform user: "For security, all removal requests must be confirmed. I have sent a confirmation to your manager and CC'd IT. This is logged as 'Pending Deprovisioning'."
 """
 
-def create_it_guardian_agent() -> Agent:
+def create_it_guardian_agent():
     """Factory function to create the agent."""
     return LlmAgent(
-        llm=llm_provider,
+        name="AccessBot",
+        model=llm_provider,
         tools=ALL_TOOLS,
-        system_prompt=AGENT_INSTRUCTIONS
+        instruction=AGENT_INSTRUCTIONS
     )
 
 # --- 6. FastAPI Server ---
@@ -286,27 +239,62 @@ class AdkInvokeIn(BaseModel):
     session_id: Optional[str] = None
     context: Optional[Dict[str, Any]] = None
 
-adk_fastapi_adapter = AdkFastApiAdapter(
-    agent_factory=create_it_guardian_agent,
-    session_id_singleton=UuidSessionIdSingleton(),
-)
-
 @app.post("/invoke")
 async def invoke_agent(input: AdkInvokeIn) -> Dict[str, Any]:
     """
-    Invokes the IT Guardian Agent.
+    Invokes the IT Guardian Agent with proper ADK 1.18.0 API.
     """
-    adk_response = await adk_fastapi_adapter.invoke(
-        Message(Role.USER, input.text),
-        session_id=input.session_id,
-        context_dict=input.context,
-    )
+    from google.adk import Runner
+    from google.adk.sessions import InMemorySessionService
+    from google.adk.apps import App
+    from google.genai import types
     
-    return {
-        "text": adk_response.message.content,
-        "session_id": adk_response.session_id,
-        "turn_id": adk_response.turn.turn_id,
-    }
+    try:
+        agent = create_it_guardian_agent()
+        # Use a unique session ID each time to avoid "session not found" errors
+        import uuid
+        session_id = input.session_id or str(uuid.uuid4())
+        user_id = "default_user"
+        
+        # Create Runner directly with agent
+        # Use "agents" as app_name to match the directory where agent is loaded from
+        runner = Runner(
+            app_name="agents",
+            agent=agent,
+            session_service=InMemorySessionService()
+        )
+        
+        # Create Content message with correct structure
+        new_message = types.Content(
+            parts=[types.Part(text=input.text)],
+            role="user"
+        )
+        
+        # Run the agent with correct signature
+        response_text = ""
+        async for event in runner.run_async(
+            user_id=user_id,
+            session_id=session_id,
+            new_message=new_message
+        ):
+            # Extract text from events
+            if hasattr(event, 'content') and event.content:
+                if hasattr(event.content, 'parts'):
+                    for part in event.content.parts:
+                        if hasattr(part, 'text') and part.text:
+                            response_text += part.text
+        
+        return {
+            "text": response_text if response_text else "Agent processed request but returned no text",
+            "session_id": session_id,
+        }
+    except Exception as e:
+        import traceback
+        return {
+            "error": str(e),
+            "traceback": traceback.format_exc(),
+            "session_id": input.session_id or "default",
+        }
 
 # --- 7. Main Entry Point ---
 if __name__ == "__main__":
