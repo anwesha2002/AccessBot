@@ -24,7 +24,7 @@ We have implemented all 5 workflows (A-E) plus duplicate checking, using the fol
 You will need two terminals.
  - ## Terminal 1: Run the Agent Server
   1. Install Dependencies:
-  - pip install "google-cloud-adk[fastapi,google,trace]" uvicorn httpx
+  - pip install "google-adk[fastapi,google,trace]" uvicorn httpx
 
   2. Set Google API Key:
   - The agent uses Gemini. You must set your API key in the environment.
