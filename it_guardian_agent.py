@@ -1,9 +1,17 @@
 # main.py
+import warnings
+# Suppress warnings FIRST before any other imports
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
+warnings.filterwarnings("ignore", category=UserWarning, message=".*protected namespace.*")
+warnings.filterwarnings("ignore", category=UserWarning, message=".*model_.*")
+
 import os
 import uuid
 import datetime
 import logging
 from typing import Optional, Dict, Any
+
+from google.adk.agents import Agent
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -31,6 +39,9 @@ Part = types.Part
 # ---------- Logging ----------
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("it-access-guardian")
+
+# Suppress ADK runner warnings
+logging.getLogger("google_adk.google.adk.runners").setLevel(logging.ERROR)
 
 # ---------- Mock services ----------
 class MockGoogleSheets:
@@ -86,13 +97,26 @@ mock_sheets_db = MockGoogleSheets()
 mock_gmail_service = MockGmail()
 
 # ---------- Tools ----------
-def find_employee_by_email(email: str):
-    return mock_sheets_db.find_row_matching("Employee_Directory", {"Employee_Email": email})
+def find_employee_by_email(email: str) -> str:
+    """
+    Looks up an employee by their email address and returns their role.
+    """
+    employees = mock_sheets_db.read_sheet("Employee_Directory")
+    for emp in employees:
+        if emp["Employee_Email"].lower() == email.lower():
+            return f"Employee found: {emp['Employee_Name']}, Role: {emp['Role']}"
+    return "Employee not found."
 
 def find_policy_for_user(software_name: str, user_role: str):
+    """
+    Looks up access policy for a given software and user role.
+    """
     return mock_sheets_db.find_row_matching("Software_Access_Policy", {"Software_Name": software_name, "Role": user_role})
 
 def check_audit_log_for_duplicate(employee_email: str, software_name: str):
+    """
+    Checks if there's already a pending request for this employee and software.
+    """
     log = mock_sheets_db.read_sheet("Audit_Log")
     for row in log:
         if row.get("Employee_Email") == employee_email and row.get("Software_Name") == software_name:
@@ -100,6 +124,9 @@ def check_audit_log_for_duplicate(employee_email: str, software_name: str):
     return None
 
 def append_to_audit_log(employee_email: str, request_type: str, software_name: str, status: str, notes: str):
+    """
+    Adds a new entry to the audit log.
+    """
     row = {
         "Employee_Email": employee_email,
         "Request_Type": request_type,
@@ -110,7 +137,24 @@ def append_to_audit_log(employee_email: str, request_type: str, software_name: s
     return mock_sheets_db.append_to_sheet("Audit_Log", row)
 
 def send_gmail(to: str, subject: str, body: str, cc: Optional[str] = None):
+    """
+    Sends an email notification.
+    """
     return mock_gmail_service.send_email(to=to, subject=subject, body=body, cc=cc)
+
+def find_manager_email(employee_email: str) -> str:
+    """
+    Looks up the manager's email for a given employee.
+    """
+    employees = mock_sheets_db.read_sheet("Employee_Directory")
+    for emp in employees:
+        if emp["Employee_Email"].lower() == employee_email.lower():
+            manager_email = emp.get("Manager_Email", "")
+            if manager_email:
+                return f"Manager email: {manager_email}"
+            else:
+                return "Manager email not found."
+    return "Employee not found."
 
 ALL_TOOLS = [
     FunctionTool(func=find_employee_by_email),
@@ -118,19 +162,92 @@ ALL_TOOLS = [
     FunctionTool(func=check_audit_log_for_duplicate),
     FunctionTool(func=append_to_audit_log),
     FunctionTool(func=send_gmail),
+    FunctionTool(func=find_manager_email),
 ]
 
 # ---------- Agent ----------
-llm_provider = Gemini()
-AGENT_INSTRUCTIONS = """(your long instructions here, keep original)"""
+AGENT_INSTRUCTIONS = """
+You are an IT Access Guardian Agent that helps employees request access to software applications.
+Your role is to streamline the approval process by checking company policies and automating approvals when possible.
+
+**WORKFLOW:**
+
+1. **Identify the Employee:**
+   - Ask for the employee's email if not provided
+   - Use find_employee_by_email() to verify the employee exists and get their role
+   - If employee not found, politely inform them and end the request
+
+2. **Identify the Software:**
+   - Ask what software they need access to if not provided
+   - Get the exact software name (e.g., "Salesforce", "GitHub", "Figma")
+
+3. **Check for Duplicates:**
+   - Use check_audit_log_for_duplicate() to see if there's already a pending request
+   - If duplicate found, inform the employee about the existing request status
+   - Do NOT create a new request if one already exists
+
+4. **Check Access Policy:**
+   - Use find_policy_for_user() with the software name and employee's role
+   - If no policy exists for this role and software:
+     * Inform the employee that this software is not typically available for their role
+     * Ask if they have a business justification
+     * Do NOT auto-approve - escalate to manager
+
+5. **Process Request Based on Policy:**
+   
+   **If policy exists and Requires_Manager_Approval = "No":**
+   - AUTO-APPROVE the request
+   - Add to audit log with Status="Approved"
+   - Send email to IT support (from policy's Approval_Contact_Email) with:
+     * Subject: "Access Request Approved: [Software] for [Employee Name]"
+     * Body: Include employee email, name, role, software, and approval details
+   - Inform the employee their request has been approved
+   
+   **If policy exists and Requires_Manager_Approval = "Yes":**
+   - PENDING MANAGER APPROVAL
+   - Add to audit log with Status="Pending Manager Approval"
+   - Use find_manager_email() to get the manager's email
+   - Send email to manager with:
+     * Subject: "Access Request Requires Your Approval: [Software] for [Employee Name]"
+     * Body: Include employee details, software requested, and ask for approval
+   - CC the IT support email (from policy's Approval_Contact_Email)
+   - Inform the employee that their request has been sent to their manager for approval
+   
+   **If no policy exists for this role:**
+   - Add to audit log with Status="Pending Manager Approval" and Notes="No policy for role"
+   - Use find_manager_email() to get the manager's email
+   - Send email to manager explaining this is an exceptional request
+   - Inform the employee that their request requires manager approval
+
+6. **Confirmation:**
+   - Provide a clear summary of what action was taken
+   - Include the request ID from the audit log if available
+   - Be friendly and professional
+
+**IMPORTANT RULES:**
+- ALWAYS check for duplicates before creating a new request
+- ALWAYS add entries to the audit log for all requests
+- Use append_to_audit_log() with request_type="Grant" for access requests
+- Be conversational and helpful, but follow the workflow strictly
+- If you're unsure about any information, ask clarifying questions
+- Keep responses concise and professional
+"""
 
 def create_it_guardian_agent():
+    llm_provider = Gemini()
     return LlmAgent(
         name="AccessBot",
         model=llm_provider,
         tools=ALL_TOOLS,
         instruction=AGENT_INSTRUCTIONS
     )
+
+def build_agent() -> Agent:
+    """
+    Factory function to return an instance of your IT Guardian Agent.
+    Used by local evaluation scripts.
+    """
+    return create_it_guardian_agent()
 
 # ---------- FastAPI App ----------
 app = FastAPI(title="IT Access Guardian Agent")
@@ -154,25 +271,18 @@ class InvokeOut(BaseModel):
 @app.post("/session")
 async def create_session():
     session = await session_store.create_session(app_name=APP_NAME, user_id="default_user")
-    return {"session_id": session.id}  # <-- use .id
+    return {"session_id": session.id}
 
 # ---------- /invoke endpoint ----------
 @app.post("/invoke", response_model=InvokeOut)
 async def invoke_agent(input: AdkInvokeIn):
-    # 1️⃣ Validate or create session
+    # 1️⃣ Get or create session
     session_id = input.session_id
-    if session_id:
-        try:
-            existing = await session_store.get_session(session_id)
-        except Exception:
-            existing = None
-        if existing is None:
-            logger.warning("client provided session_id not found, creating a new session")
-            new_sess = await session_store.create_session(app_name=APP_NAME, user_id="default_user")
-            session_id = new_sess.id
-    else:
+    if not session_id:
+        # Only create new session if no session_id was provided
         new_sess = await session_store.create_session(app_name=APP_NAME, user_id="default_user")
         session_id = new_sess.id
+    # If session_id was provided, use it as-is (Runner handles session persistence)
 
     # 2️⃣ Build Content
     new_message = types.Content(role="user", parts=[Part(text=input.text)])
