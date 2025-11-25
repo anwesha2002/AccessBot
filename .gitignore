@@ -4,20 +4,24 @@
 .env
 *.env
 env/
+.env/
+
+# -------------------------
+# Python Build / Cache
+# -------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# -------------------------
+# Virtual Environments
+# -------------------------
+venv/
+.venv/
 
 # -------------------------
 # OS / Editor Files
 # -------------------------
 .DS_Store
 Thumbs.db
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-.pytest_cache/
-.coverage
-
-# Virtual Env
-newvenv/
-.vscode/
