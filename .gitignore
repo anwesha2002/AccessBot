@@ -1,11 +1,23 @@
-# Environment files
+# -------------------------
+# Environment / Secrets
+# -------------------------
 .env
 *.env
+env/
+
+# -------------------------
+# OS / Editor Files
+# -------------------------
+.DS_Store
+Thumbs.db
 
 # Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
 
-# Virtual environment
-venv/
+# Virtual Env
+newvenv/
+.vscode/

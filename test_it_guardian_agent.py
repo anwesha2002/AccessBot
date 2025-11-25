@@ -4,7 +4,7 @@ import asyncio
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
-from it_guardian_agent import create_it_guardian_agent, mock_sheets_db
+from src.it_guardian_agent import create_it_guardian_agent, mock_sheets_db
 
 import time
 
@@ -186,7 +186,7 @@ async def test_nonexistent_software(services):
 
 def test_build_agent():
     """Verify that build_agent() factory function returns a valid agent."""
-    from it_guardian_agent import build_agent
+    from src.it_guardian_agent import build_agent
     from google.adk.agents import LlmAgent
     
     agent = build_agent()
@@ -205,7 +205,7 @@ def test_build_agent():
 def test_api_session_persistence():
     """Verify that the API maintains session ID across requests (fixes session bug)."""
     from fastapi.testclient import TestClient
-    from it_guardian_agent import app, runner
+    from src.it_guardian_agent import app, runner
     from unittest.mock import MagicMock
     
     client = TestClient(app)
