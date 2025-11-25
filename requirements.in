@@ -1,15 +1,15 @@
-#Direct Dependencies
+# Direct Dependencies
 
 # Core web framework
 fastapi>=0.100.0
 uvicorn[standard]>=0.20.0
-httpx>=0.24.0
+httpx>=0.24.0  # Also used by evaluation scripts
 
 # Data validation
 pydantic>=2.0.0
 
 # Google ADK (Agent Development Kit)
-google-adk>=1.0.0
+google-adk>=1.0.0  # Includes evaluation tools (llm_as_judge)
 
 # Google AI/LLM
 google-generativeai>=0.3.0
