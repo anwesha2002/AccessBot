@@ -276,39 +276,76 @@ async def create_session():
 # ---------- /invoke endpoint ----------
 @app.post("/invoke", response_model=InvokeOut)
 async def invoke_agent(input: AdkInvokeIn):
-    # 1️⃣ Get or create session
-    session_id = input.session_id
-    if not session_id:
-        # Only create new session if no session_id was provided
-        new_sess = await session_store.create_session(app_name=APP_NAME, user_id="default_user")
-        session_id = new_sess.id
-    # If session_id was provided, use it as-is (Runner handles session persistence)
-
-    # 2️⃣ Build Content
-    new_message = types.Content(role="user", parts=[Part(text=input.text)])
-
-    # 3️⃣ Run agent
-    response_text = ""
-    user_id = "default_user"
-    agen = runner.run_async(session_id=session_id, user_id=user_id, new_message=new_message)
-    try:
-        async for event in agen:
-            if getattr(event, "content", None) and getattr(event.content, "parts", None):
-                for p in event.content.parts:
-                    if getattr(p, "text", None):
-                        response_text += p.text
-            if getattr(event, "is_final", None) and event.is_final():
-                break
-    finally:
+    import asyncio
+    
+    # Retry configuration
+    max_retries = 3
+    retry_delay = 2  # seconds
+    
+    for attempt in range(max_retries):
         try:
-            await agen.aclose()
-        except Exception:
-            pass
+            # 1️⃣ Get or create session
+            session_id = input.session_id
+            if not session_id:
+                # Only create new session if no session_id was provided
+                new_sess = await session_store.create_session(app_name=APP_NAME, user_id="default_user")
+                session_id = new_sess.id
+            # If session_id was provided, use it as-is (Runner handles session persistence)
 
-    if not response_text:
-        raise HTTPException(status_code=500, detail="Agent returned no text")
+            # 2️⃣ Build Content
+            new_message = types.Content(role="user", parts=[Part(text=input.text)])
 
-    return InvokeOut(text=response_text, session_id=session_id)
+            # 3️⃣ Run agent
+            response_text = ""
+            user_id = "default_user"
+            agen = runner.run_async(session_id=session_id, user_id=user_id, new_message=new_message)
+            try:
+                async for event in agen:
+                    if getattr(event, "content", None) and getattr(event.content, "parts", None):
+                        for p in event.content.parts:
+                            if getattr(p, "text", None):
+                                response_text += p.text
+                    if getattr(event, "is_final", None) and event.is_final():
+                        break
+            finally:
+                try:
+                    await agen.aclose()
+                except Exception:
+                    pass
+
+            if not response_text:
+                error_msg = f"Agent returned no text (attempt {attempt + 1}/{max_retries})"
+                logger.warning(error_msg)
+                
+                if attempt < max_retries - 1:
+                    logger.info(f"Retrying in {retry_delay} seconds...")
+                    await asyncio.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                    continue
+                else:
+                    # Provide a helpful error message instead of failing
+                    return InvokeOut(
+                        text="I apologize, but I'm having trouble processing your request right now. This might be due to API rate limits. Please try again in a moment.",
+                        session_id=session_id
+                    )
+
+            return InvokeOut(text=response_text, session_id=session_id)
+            
+        except Exception as e:
+            error_msg = f"Error in invoke_agent (attempt {attempt + 1}/{max_retries}): {str(e)}"
+            logger.error(error_msg)
+            
+            if attempt < max_retries - 1:
+                logger.info(f"Retrying in {retry_delay} seconds...")
+                await asyncio.sleep(retry_delay)
+                retry_delay *= 2
+                continue
+            else:
+                # Last attempt failed
+                raise HTTPException(
+                    status_code=500, 
+                    detail=f"Agent failed after {max_retries} attempts: {str(e)}"
+                )
 
 # ---------- Run ----------
 if __name__ == "__main__":

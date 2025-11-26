@@ -1,0 +1,44 @@
+[
+  {
+    "scenario": "New User - Workflow D",
+    "status": "PASS",
+    "conversation": "User: Hi\nAgent: Hello! I'm your IT Access Guardian Agent. I can help you request access to software applications. To start, please tell me your employee email address.\n\nUser: I am new.user@company.demo\nAgent: I'm sorry, but I couldn't find an employee with the email address `new.user@company.demo` in our system. Please double-check your email address and try again. If you continue to have issues, please contact IT support.",
+    "last_response": "I'm sorry, but I couldn't find an employee with the email address `new.user@company.demo` in our system. Please double-check your email address and try again. If you continue to have issues, please contact IT support."
+  },
+  {
+    "scenario": "Auto-Approval - Workflow A (Sales + Salesforce)",
+    "status": "PASS",
+    "conversation": "User: Hi\nAgent: Hello! I'm your IT Access Guardian Agent. I can help you request access to software applications. To start, please tell me your employee email address.\n\nUser: I am sam.sales@company.demo\nAgent: Great, Sam. I see you're in the Sales role.\n\nWhat software application do you need access to?\nUser: I need to get access\nAgent: What is the exact name of the software you need access to? For example, \"Salesforce,\" \"GitHub,\" or \"Figma.\"\nUser: Salesforce\nAgent: Great news, Sam! Your request for Salesforce access has been automatically approved based on company policy.\n\nI've added it to the audit log with Request ID: 1002 and notified IT support. You should have access shortly.",
+    "last_response": "Great news, Sam! Your request for Salesforce access has been automatically approved based on company policy.\n\nI've added it to the audit log with Request ID: 1002 and notified IT support. You should have access shortly."
+  },
+  {
+    "scenario": "Manager Approval - Workflow B (Sales + GitHub)",
+    "status": "PASS",
+    "conversation": "User: Hi\nAgent: Hello! I'm your IT Access Guardian Agent. I can help you request access to software applications. To start, please tell me your employee email address.\n\nUser: I am sam.sales@company.demo\nAgent: Thanks, Sam. I've found your employee record, and your role is Sales.\n\nWhat software do you need access to?\nUser: I need to get access\nAgent: What software do you need to get access to? Please provide the exact name of the software.\nUser: GitHub\nAgent: Your request for GitHub access has been sent to your manager, `sales.manager@company.demo`, for approval. IT support has also been CC'd.\n\nYour request ID is **1003**. You will be notified once your manager approves it.\nUser: Yes, please send it.\nAgent: I have already sent your request for GitHub access to your manager for approval. Your request ID is **1003**. You will be notified once your manager approves it.",
+    "last_response": "I have already sent your request for GitHub access to your manager for approval. Your request ID is **1003**. You will be notified once your manager approves it."
+  },
+  {
+    "scenario": "Policy Rejection - Workflow C (Sales + Figma)",
+    "status": "PASS",
+    "conversation": "User: Hi\nAgent: Hello! I'm your IT Access Guardian Agent. I can help you request access to software applications. To start, please tell me your employee email address.\n\nUser: I am sam.sales@company.demo\nAgent: Great, Sam! I've found you in the system. You are in the Sales role.\n\nWhat software application do you need access to?\nUser: I need to get access\nAgent: Access to what software, Sam?\nUser: Figma\nAgent: It looks like there's no existing access policy for Figma for your Sales role, Sam. This means it's not typically available for your role.\n\nDo you have a business justification for needing access to Figma? This request will need your manager's approval.",
+    "last_response": "It looks like there's no existing access policy for Figma for your Sales role, Sam. This means it's not typically available for your role.\n\nDo you have a business justification for needing access to Figma? This request will need your manager's approval."
+  },
+  {
+    "scenario": "Duplicate Check",
+    "status": "PASS",
+    "conversation": "User: Hi\nAgent: Hello! I'm your IT Access Guardian Agent. I can help you request access to software applications. To start, please tell me your employee email address.\n\nUser: edna.eng@company.demo\nAgent: Thank you, Edna. I see you are an Engineer. What software application do you need access to?\nUser: I need to get access\nAgent: Access to what software, Edna? Could you please provide the name of the software application?\nUser: Figma\nAgent: It looks like you already have a pending request for Figma access (Request ID: 1001). The current status is \"Pending Manager Approval\". You should receive an update once your manager reviews it.\n\nIs there anything else I can help you with today?",
+    "last_response": "It looks like you already have a pending request for Figma access (Request ID: 1001). The current status is \"Pending Manager Approval\". You should receive an update once your manager reviews it.\n\nIs there anything else I can help you with today?"
+  },
+  {
+    "scenario": "Engineering Auto-Approval - Workflow A (Engineering + GitHub)",
+    "status": "PASS",
+    "conversation": "User: Hi\nAgent: Hello! I'm your IT Access Guardian Agent. I can help you request access to software applications. To start, please tell me your employee email address.\nUser: I am edna.eng@company.demo\nAgent: Great, Edna! I see you're an Engineer. What software application do you need access to?\nUser: I need to get access\nAgent: Access to what software, Edna? Please tell me the name of the software you need.\nUser: GitHub\nAgent: Great news, Edna! Your request for GitHub access has been **auto-approved** based on company policy.\n\nYour request ID is **1004**.\n\nAn email has been sent to IT support to finalize your access. You should receive access shortly.",
+    "last_response": "Great news, Edna! Your request for GitHub access has been **auto-approved** based on company policy.\n\nYour request ID is **1004**.\n\nAn email has been sent to IT support to finalize your access. You should receive access shortly."
+  },
+  {
+    "scenario": "De-provisioning - Workflow E",
+    "status": "PASS",
+    "conversation": "User: Hi\nAgent: Hello! I'm your IT Access Guardian Agent. I can help you request access to software applications. To start, please tell me your employee email address.\n\nUser: I am sam.sales@company.demo\nAgent: Great, Sam. I see you're in Sales. What software application do you need access to?\nUser: I need to remove my access\nAgent: I can only help with granting access to software applications at the moment. I cannot process requests to remove access. Please contact IT support directly for access removal requests.\nUser: GitHub\nAgent: It looks like you already have a pending request for GitHub access (Request ID: 1003). The status is \"Pending Manager Approval\". You will be notified once your manager approves it.",
+    "last_response": "It looks like you already have a pending request for GitHub access (Request ID: 1003). The status is \"Pending Manager Approval\". You will be notified once your manager approves it."
+  }
+]
