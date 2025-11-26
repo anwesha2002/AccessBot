@@ -1,0 +1,228 @@
+INFO:it-access-guardian:Starting IT Access Guardian Agent server on http://127.0.0.1:8000
+INFO:     Started server process [2836]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:56978 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+WARNING:google_genai.types:Warning: there are non-text parts in the response: ['function_call'], returning concatenated text result from text parts. Check the full candidates.content.parts accessor to get the full model response.
+INFO:it-access-guardian:[MOCK_SHEETS] read Employee_Directory
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:52979 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:55741 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Employee_Directory
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:55743 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:55748 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Audit_Log
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] search Software_Access_Policy for {'Software_Name': 'Salesforce', 'Role': 'Sales'}
+INFO:it-access-guardian:[MOCK_SHEETS] found row: {'Software_Name': 'Salesforce', 'Role': 'Sales', 'Requires_Manager_Approval': 'No', 'Approval_Contact_Email': 'it-support@company.demo'}
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] append Audit_Log -> {'Employee_Email': 'sam.sales@company.demo', 'Request_Type': 'Grant', 'Software_Name': 'Salesforce', 'Status': 'Approved', 'Notes': 'Auto-approved based on policy.'}
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_GMAIL] To: it-support@company.demo Cc: None Subject: Access Request Approved: Salesforce for Sam Sales Body: Employee Email: sam.sales@company.demo
+Employee Name: Sam Sales
+Employee Role: Sales
+Software Requested: Salesforce
+Approval Details: Auto-approved based on policy.
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:55755 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:51664 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Employee_Directory
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:51981 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:51985 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Audit_Log
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] search Software_Access_Policy for {'Software_Name': 'GitHub', 'Role': 'Sales'}
+INFO:it-access-guardian:[MOCK_SHEETS] found row: {'Software_Name': 'GitHub', 'Role': 'Sales', 'Requires_Manager_Approval': 'Yes', 'Approval_Contact_Email': 'it-support@company.demo'}
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] append Audit_Log -> {'Employee_Email': 'sam.sales@company.demo', 'Request_Type': 'Grant', 'Software_Name': 'GitHub', 'Status': 'Pending Manager Approval', 'Notes': ''}
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Employee_Directory
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_GMAIL] To: sales.manager@company.demo Cc: it-support@company.demo Subject: Access Request Requires Your Approval: GitHub for Sam Sales Body: Dear Manager,
+
+Sam Sales (sam.sales@company.demo, Role: Sales) has requested access to GitHub. This request requires your approval.
+
+Please review and approve as appropriate.
+
+Thank you.
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:51991 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:52005 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:52031 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Employee_Directory
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:52033 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:52035 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Audit_Log
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] search Software_Access_Policy for {'Software_Name': 'Figma', 'Role': 'Sales'}
+INFO:it-access-guardian:[MOCK_SHEETS] no row found
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:52037 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:52053 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Employee_Directory
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:52058 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:52061 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Audit_Log
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:50897 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:50916 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Employee_Directory
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:50920 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:50922 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Audit_Log
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] search Software_Access_Policy for {'Software_Name': 'GitHub', 'Role': 'Engineering'}
+INFO:it-access-guardian:[MOCK_SHEETS] found row: {'Software_Name': 'GitHub', 'Role': 'Engineering', 'Requires_Manager_Approval': 'No', 'Approval_Contact_Email': 'it-support@company.demo'}
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] append Audit_Log -> {'Employee_Email': 'edna.eng@company.demo', 'Request_Type': 'Grant', 'Software_Name': 'GitHub', 'Status': 'Approved', 'Notes': 'Auto-approved based on policy'}
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_GMAIL] To: it-support@company.demo Cc: None Subject: Access Request Approved: GitHub for Edna Engineer Body: Employee Email: edna.eng@company.demo
+Employee Name: Edna Engineer
+Employee Role: Engineering
+Software: GitHub
+Approval Details: Auto-approved based on policy.
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:50930 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:64752 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Employee_Directory
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:65298 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:65347 - "POST /invoke HTTP/1.1" 200 OK
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:it-access-guardian:[MOCK_SHEETS] read Audit_Log
+INFO:google_adk.google.adk.models.google_llm:Sending out request, model: gemini-2.5-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+INFO:google_adk.google.adk.models.google_llm:Response received from the model.
+INFO:     127.0.0.1:65350 - "POST /invoke HTTP/1.1" 200 OK

@@ -25,3 +25,11 @@ venv/
 # -------------------------
 .DS_Store
 Thumbs.db
+.vscode/
+
+#-------------------------
+# Coverage
+#-------------------------
+coverage/
+.coverage
+
