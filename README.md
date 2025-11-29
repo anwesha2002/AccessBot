@@ -15,7 +15,7 @@ Our project is submitted under the Enterprise Agents track.
 We have implemented all 5 workflows (A-E) plus duplicate checking, using the following ADK key concepts:
  - [x] Tools (Custom): We built 5 custom Python tools with the @tool decorator (find_employee_by_email, find_policy_for_user, check_audit_log_for_duplicate, append_to_audit_log, send_gmail).
  - [x] Sessions & Memory: The AdkFastApiAdapter and UuidSessionIdSingleton are used to automatically manage conversational state. The agent remembers who the user is (e.g., sam.sales@company.demo) across multiple turns.
- - [x] Agent Evaluation: The run_evaluation.py script provides a full 7-case test suite. It uses tool_call to verify the agent's actions (e.g., "did it really log 'Rejected'?") and llm_as_judge to verify the agent's words (e.g., "did it correctly state the status?").
+ - [x] Agent Evaluation: The test/run_evaluation.py script provides a full 7-case test suite with LLM-as-judge methodology. We also provide test/run_full_evaluation_with_server_logs.py for comprehensive automated testing with complete logging.
  - [x] Observability: AdkLogging.setup_logging() and AdkTrace.setup_trace() are implemented. This provides full visibility into the agent's decision-making (LLM prompts, tool selection, tool outputs) for debugging and tracing.
  - [x] Agent Deployment (A2A Protocol): The agent is deployed as a FastAPI web service, not a simple script. This makes it an A2A-compatible endpoint that any other service or agent can call via HTTP.
  - [x] Multi-agent system (Conceptual): Our agent is the first agent in a multi-agent system. It handles the user-facing task and then (via send_gmail) hands off the workflow to the next "agents" in the process: the Manager (for approval) and the IT Admin (for provisioning).
@@ -26,27 +26,26 @@ You will need two terminals.
   1. Install Dependencies:
   - pip install "google-adk[fastapi,google,trace]" uvicorn httpx
 
-  2. Set Google API Key:
-  - The agent uses Gemini. You must set your API key in the environment.
-  -(Replace YOUR_API_KEY_HERE with your actual key)
-  - export GOOGLE_API_KEY="YOUR_API_KEY_HERE"
-
-  3. Run the Server:
-  - python it_guardian_agent.py
-
-  - Keep this server running. You will see it print:
-  - Access the API at http://127.0.0.1:8000/docs
-  - 
- - ## Terminal 2: Run the Evaluation
- Once the server in Terminal 1 is running, you can run the evaluation script to test it.
  1. Set Google API Key:
  - This terminal also needs the API key for the "LLM as Judge" to work.
  - export GOOGLE_API_KEY="YOUR_API_KEY_HERE"
 
  2. Run the Evaluation Script:
- - python run_evaluation.py
+ 
+   **Option A - All-in-One (Recommended):**
+   - python test/run_full_evaluation_with_server_logs.py --batch-size 1
+   - This automatically starts the server, runs tests, and captures all logs
+   
+   **Option B - Manual (if server already running):**
+   - python test/run_evaluation.py
+   
+   **Option C - Quick Test (2 scenarios only):**
+   - python test/run_evaluation_quick.py
 
- 3. Analyze Results: You will see a summary in your terminal showing that all 7 tests passed or failed.
+ 3. Analyze Results: 
+   - Results are saved to evidence/evaluation_results/
+   - Both server logs and client logs are captured automatically
+   - See test/README.md for detailed testing documentation
 
 ## How to Play Manually (Optional)
 You can "talk" to your agent manually by using the FastAPI docs page.
@@ -82,7 +81,7 @@ Run these commands from your project's root folder (the one containing all your 
      git add .gitignore
 
 Note: If you are using an existing repo, just add the new files.
-git add run_evaluation.py README.md
+git add test/run_evaluation.py README.md src/it_guardian_agent.py
 
 
  - Make Your Commit:
