@@ -57,11 +57,9 @@ class MockGoogleSheets:
                 {"Software_Name": "GitHub", "Role": "Engineering", "Requires_Manager_Approval": "No", "Approval_Contact_Email": "it-support@company.demo"},
                 {"Software_Name": "Figma", "Role": "Design", "Requires_Manager_Approval": "No", "Approval_Contact_Email": "it-support@company.demo"},
             ],
-            "Audit_Log": [
-                {"Request_ID": "1001", "Timestamp": "2025-11-15T10:00:00Z", "Employee_Email": "edna.eng@company.demo", "Request_Type": "Grant", "Software_Name": "Figma", "Status": "Pending Manager", "Notes": "Waiting for manager."}
-            ]
+            "Audit_Log": []  # Start with empty log for clean demo
         }
-        self.next_request_id = 1002
+        self.next_request_id = 1001  # Start from 1001 since log is empty
 
     def read_sheet(self, sheet_name: str):
         logger.info("[MOCK_SHEETS] read %s", sheet_name)
